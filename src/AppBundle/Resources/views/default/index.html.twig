@@ -2,8 +2,9 @@
 
 {% block body %}
     <p>Hello.</p>
-    {{ tracks.country }}
-
+    {% if user %}
+    {{ user.country }}
+    {% endif %}
 {% endblock %}
 
 
