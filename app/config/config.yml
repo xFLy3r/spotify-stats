@@ -67,3 +67,15 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [secured_area]
+    resource_owners:
+            spotify:
+                type:                spotify
+                client_id:           c50aa5b6db424029a2760363aee0467f
+                client_secret:       5776bef0a5bc46a89b8ff0a259d5d5c5
+                scope: 'user-read-private user-read-email user-library-read'
+                options:
+                     csrf: true
+

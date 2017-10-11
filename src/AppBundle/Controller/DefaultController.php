@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+
+use AppBundle\Service\SpotifyRequester;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +17,12 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+        $content = $this->get('app.spotify_requester')->getInfoAboutCurrentUser();
+
+        dump($content);
+        return $this->render('@App/default/index.html.twig', [
+            'tracks' => $content,
+        ]);
     }
 
     /**
@@ -24,4 +32,19 @@ class DefaultController extends Controller
     {
         return $this->render('default/login.html.twig');
     }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction()
+    {
+
+    }
+    /**
+     * Route("/login/check-spotify", name="check-spotify")
+     */
+    //public function checkAction(Request $request)
+    //{
+
+    //}
 }

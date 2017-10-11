@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <p>Hello buddy.</p>
+    <p>Hello.</p>
+    {% for track in tracks %}
+        {{ track }}
+    {% endfor %}
 {% endblock %}
 
 
