@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="login_page">
+        <h1>Login</h1>
+        <a class="social-button google" href="{{ url("hwi_oauth_service_redirect", {service: "google"}) }}">Sign in with Google</a>
+        <a class="social-button spotify" href="{{ url("hwi_oauth_service_redirect", {service: "spotify"}) }}">Sign in with Spotify</a>
+
+        <div id="fb-root"></div>
+    </div>
+{% endblock %}
