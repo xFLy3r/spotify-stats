@@ -18,15 +18,14 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $spotify = $this->get('app.spotify_requester');
-        dump($spotify->getFavouriteArtist());
-        dump($spotify->getInfoAboutCurrentUser());
-        dump($spotify->getFavouriteTrack());
-        dump($spotify->getRecentlyPlayedTrack());
         return $this->render('@App/default/index.html.twig', [
             'user' => $spotify->getInfoAboutCurrentUser(),
             'artist' => $spotify->getFavouriteArtist(),
             'track' => $spotify->getFavouriteTrack(),
             'recentlyPlayed' => $spotify->getRecentlyPlayedTrack(),
+            'countOfSavedTracks' => count($spotify->getSavedTracks()),
+            'favouriteGenre' => $spotify->getFavouriteGenre(),
+            'countOfPlaylists' => count($spotify->getListOfPlaylist()),
         ]);
     }
 

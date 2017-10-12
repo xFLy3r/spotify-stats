@@ -116,6 +116,62 @@ class SpotifyRequester
 
         return $content;
     }
+
+    public function getFavouriteGenre()
+    {
+        $token = $this->getToken();
+        if ($token === false) {
+            return null;
+        }
+
+        $response = $this->client->request('GET',
+            'https://api.spotify.com/v1/me/top/artists?limit=50&time_range=long_term', [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
+
+        $content = json_decode($response->getBody()->getContents(), true);
+        $genres = array();
+        foreach ($content['items'] as $artist) {
+            foreach ($artist['genres'] as $genre) {
+                $genres[] = $genre;
+            }
+        }
+
+        $genre = array_search(max(array_count_values($genres)), array_count_values($genres));
+        return ucwords(strtolower($genre));
+    }
+
+    public function getSavedTracks()
+    {
+        $token = $this->getToken();
+        if ($token === false) {
+            return null;
+        }
+
+
+        $tracks = array();
+        $offset = 0;
+        do {
+            $response = $this->client->request('GET',
+                'https://api.spotify.com/v1/me/tracks?limit=50&offset=' . $offset, [
+                    'headers' => [
+                        'Authorization:' => 'Bearer ' . $token,
+                        'Accept:' => 'application/json',
+                        'Content-Type:' => 'application/json',
+                    ]
+                ]);
+            $content = json_decode($response->getBody()->getContents(), true);
+            $offset += count($content['items']);
+            $tracks = array_merge($tracks, $content['items']);
+        }
+        while (count($content['items']) != 0);
+
+        return $tracks;
+    }
     protected function getToken()
     {
         if ($this->tokenStorage->getToken() instanceof OAuthToken) {
@@ -130,5 +186,32 @@ class SpotifyRequester
     protected function refreshToken()
     {
 
+    }
+
+    public function getListOfPlaylist()
+    {
+        $token = $this->getToken();
+        if ($token === false) {
+            return null;
+        }
+
+        $tracks = array();
+        $offset = 0;
+        do {
+            $response = $this->client->request('GET',
+                'https://api.spotify.com/v1/me/playlists?limit=50&offset=' . $offset, [
+                    'headers' => [
+                        'Authorization:' => 'Bearer ' . $token,
+                        'Accept:' => 'application/json',
+                        'Content-Type:' => 'application/json',
+                    ]
+                ]);
+            $content = json_decode($response->getBody()->getContents(), true);
+            $offset += count($content['items']);
+            $tracks = array_merge($tracks, $content['items']);
+        }
+        while (count($content['items']) != 0);
+
+        return $tracks;
     }
 }

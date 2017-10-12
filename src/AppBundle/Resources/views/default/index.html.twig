@@ -31,6 +31,20 @@
             <p><strong>{{ recentlyPlayed.items.0.track.artists.0.name }}</strong> - {{ recentlyPlayed.items.0.track.name }}</p>
         </div>
     </div>
+    <div class="columns notification has-text-centered">
+        <div class="column is-one-third">
+            <h3 class="title">Count of Saved Tracks</h3>
+            <p>{{ countOfSavedTracks }}</p>
+        </div>
+        <div class="column">
+            <h3 class="title">Favourite Genre</h3>
+            <p>{{ favouriteGenre }}</p>
+        </div>
+        <div class="column">
+            <h3 class="title">Count of Playlists</h3>
+            <p>{{ countOfPlaylists }}</p>
+        </div>
+    </div>
 {% endblock %}
 
 
