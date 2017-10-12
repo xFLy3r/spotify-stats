@@ -1,20 +1,23 @@
 {% extends '@App/base.html.twig' %}
 
 {% block body %}
-    <p>Hello.</p>
-    {% if user %}
+    {#{% if user %}
     {{ user.country }}
-    {% endif %}
-    <section class="section">
-        <div class="container">
-            <h1 class="title">
-                Hello World
-            </h1>
-            <p class="subtitle">
-                My first website with <strong>Bulma</strong>!
-            </p>
+    {% endif %}#}
+    <div class="columns is-mobile is-multiline is-centered  notification">
+        <div class="column is-narrow">
+            <figure class="image is-128x128">
+                <img src="{{ user.images.0.url }}">
+            </figure>
         </div>
-    </section>
+        <div class="column is-narrow">
+            <p><strong>Display name:</strong> {{ user.display_name }}</p>
+            <p><strong>Country:</strong> {{ user.country }}</p>
+            <p><strong>Email:</strong>  {{ user.email }}</p>
+            <p><strong>Id:</strong>  {{ user.id }}</p>
+            <p><strong>Type:</strong>  {{ user.product }}</p>
+        </div>
+    </div>
 {% endblock %}
 
 

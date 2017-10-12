@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SpotifyResourceOwner;
@@ -28,16 +29,26 @@ class SpotifyRequester
         if ($token === false) {
             return null;
         }
-        $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
-            'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json',
-            ]
-        ]);
-        if ($response->getStatusCode() === 401) {
-            $response = $this->client->request('GET', '/login/connect-spotify');
+
+        try {
+            $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
+        } catch (RequestException $e) {
+            $this->client->request('GET', 'http://spotify-stats/app_dev.php/connect/spotify');
+            $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
         }
+
         $content = json_decode($response->getBody()->getContents(), true);
 
         return $content;
