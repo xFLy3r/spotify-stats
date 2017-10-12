@@ -152,8 +152,6 @@ class SpotifyRequester
             return null;
         }
 
-
-        $tracks = array();
         $offset = 0;
         do {
             $response = $this->client->request('GET',
@@ -164,13 +162,13 @@ class SpotifyRequester
                         'Content-Type:' => 'application/json',
                     ]
                 ]);
+
             $content = json_decode($response->getBody()->getContents(), true);
             $offset += count($content['items']);
-            $tracks = array_merge($tracks, $content['items']);
         }
         while (count($content['items']) != 0);
 
-        return $tracks;
+        return $offset;
     }
 
     protected function getToken()
