@@ -172,6 +172,7 @@ class SpotifyRequester
 
         return $tracks;
     }
+
     protected function getToken()
     {
         if ($this->tokenStorage->getToken() instanceof OAuthToken) {
