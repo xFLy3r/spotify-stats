@@ -152,10 +152,8 @@ class SpotifyRequester
             return null;
         }
 
-        $offset = 0;
-        do {
             $response = $this->client->request('GET',
-                'https://api.spotify.com/v1/me/tracks?limit=50&offset=' . $offset, [
+                'https://api.spotify.com/v1/me/tracks?limit=1', [
                     'headers' => [
                         'Authorization:' => 'Bearer ' . $token,
                         'Accept:' => 'application/json',
@@ -164,11 +162,8 @@ class SpotifyRequester
                 ]);
 
             $content = json_decode($response->getBody()->getContents(), true);
-            $offset += count($content['items']);
-        }
-        while (count($content['items']) != 0);
 
-        return $offset;
+        return $content['total'];
     }
 
     protected function getToken()
