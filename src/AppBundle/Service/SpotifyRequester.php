@@ -4,11 +4,7 @@ namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SpotifyResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SpotifyRequester
@@ -189,11 +185,8 @@ class SpotifyRequester
             return null;
         }
 
-        $tracks = array();
-        $offset = 0;
-        do {
-            $response = $this->client->request('GET',
-                'https://api.spotify.com/v1/me/playlists?limit=50&offset=' . $offset, [
+        $response = $this->client->request('GET',
+                'https://api.spotify.com/v1/me/playlists?limit=1', [
                     'headers' => [
                         'Authorization:' => 'Bearer ' . $token,
                         'Accept:' => 'application/json',
@@ -201,11 +194,7 @@ class SpotifyRequester
                     ]
                 ]);
             $content = json_decode($response->getBody()->getContents(), true);
-            $offset += count($content['items']);
-            $tracks = array_merge($tracks, $content['items']);
-        }
-        while (count($content['items']) != 0);
 
-        return $tracks;
+        return $content['total'];
     }
 }
