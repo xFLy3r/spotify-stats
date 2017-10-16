@@ -6,8 +6,13 @@ security:
     providers:
         in_memory:
             memory: ~
-        hwi:
-            id: hwi_oauth.user.provider
+        custom:
+            id: ib_user.oauth_user_provider
+        provider_users:
+                entity:
+                    class: AppBundle:User
+                    property: username
+
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
@@ -23,7 +28,8 @@ security:
                                 use_forward:       false
                                 failure_path:      /login
                                 oauth_user_provider:
-                                    service: hwi_oauth.user.provider
+                                    service: ib_user.oauth_user_provider
+
 
         main:
             anonymous: ~
