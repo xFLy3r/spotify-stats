@@ -2,36 +2,35 @@
 
 {% block body %}
     {% if user %}
-    <div class="columns is-mobile is-multiline is-centered  notification">
-
-        <div class="column is-narrow">
-            <figure class="image is-128x128">
-                <img src="{{ user.images.0.url }}">
-            </figure>
+        <div class="columns is-mobile is-multiline is-centered top-column">
+            <div class="column is-narrow">
+                <figure class="image is-128x128">
+                    <img src="{{ user.images.0.url }}">
+                </figure>
+            </div>
+            <div class="column is-narrow">
+                <p><strong>Display name:</strong> {{ user.display_name }}</p>
+                <p><strong>Country:</strong> {{ user.country }}</p>
+                <p><strong>Email:</strong>  {{ user.email }}</p>
+                <p><strong>Id:</strong>  {{ user.id }}</p>
+                <p><strong>Type:</strong>  {{ user.product }}</p>
+            </div>
         </div>
-        <div class="column is-narrow">
-            <p><strong>Display name:</strong> {{ user.display_name }}</p>
-            <p><strong>Country:</strong> {{ user.country }}</p>
-            <p><strong>Email:</strong>  {{ user.email }}</p>
-            <p><strong>Id:</strong>  {{ user.id }}</p>
-            <p><strong>Type:</strong>  {{ user.product }}</p>
-        </div>
-    </div>
-    <div class="columns notification has-text-centered">
-        <div class="column is-one-third">
+    <div class="columns has-text-centered">
+        <div class="column is-one-third ">
             <h3 class="title">Favourite Artist</h3>
             <p>{{ artist.items.0.name }}</p>
         </div>
-        <div class="column">
+        <div class="column is-one-third">
             <h3 class="title">Favourite Track</h3>
             <p><strong>{{ track.items.0.artists.0.name }}</strong> - {{ track.items.0.name }}</p>
         </div>
-        <div class="column">
+        <div class="column is-one-third">
             <h3 class="title">Recently Played Track</h3>
             <p><strong>{{ recentlyPlayed.items.0.track.artists.0.name }}</strong> - {{ recentlyPlayed.items.0.track.name }}</p>
         </div>
     </div>
-    <div class="columns notification has-text-centered">
+    <div class="columns has-text-centered">
         <div class="column is-one-third">
             <h3 class="title">Count of Saved Tracks</h3>
             <p>{{ countOfSavedTracks }}</p>
@@ -45,8 +44,34 @@
             <p>{{ countOfPlaylists }}</p>
         </div>
     </div>
-        {% endif %}
-    <canvas id="test"></canvas>
+    {% else %}
+   <!-- <canvas id="test"></canvas> -->
+   <!-- <div class="columns is-mobile is-vcentered">
+        <div class="column is-half is-offset-one-quarter column-grey">
+            yes
+        </div>
+    </div> -->
+    <section class="hero wrap is-fullheight wrap">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="column is-half is-offset-one-quarter">
+                    <p class="title">
+                        Hello dude!
+                    </p>
+                    <p class="subtitle">
+                        If you want to check your stats on Spotify, press button below :)
+                    </p>
+                    <a class="button is-primary" href="{{ url("hwi_oauth_service_redirect", {service: "spotify"}) }}">
+                        <span class="icon">
+                            <i class="fa fa-spotify spotify-icon"></i>
+                        </span>
+                        Login with Spotify
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
 {% endblock %}
 
 

@@ -1,12 +1,38 @@
-/*html {
+html {
+    background: #74ebd5 no-repeat center center fixed;
     overflow-y: auto;
-}
-body {
-    background: #74ebd5;
     background: -webkit-linear-gradient(to right, #74ebd5, #acb6e5);
     background: linear-gradient(to right, #74ebd5, #acb6e5);
-}  */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 #test {
     width: 75% !important;
     height: 75% !important;
+}
+
+.column-grey {
+    background-color: whitesmoke;
+    /*border: 2px solid #00d1b2; */
+    border-radius: 10px;
+}
+
+.wrap {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.spotify-icon {
+    margin-right: 10px;
+}
+
+.myImage {
+    display: block;
+    margin: auto;
+}
+
+.top-column {
+    margin-top: 10px;
 }
