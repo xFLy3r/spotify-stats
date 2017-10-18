@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -19,6 +20,10 @@ class SpotifyRequester
         $this->client = new Client();
     }
 
+    private function refreshToken()
+    {
+        $this->getToken();
+    }
     public function getInfoAboutCurrentUser()
     {
         $token = $this->getToken();
@@ -26,7 +31,6 @@ class SpotifyRequester
             return null;
         }
 
-        try {
             $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
                 'headers' => [
                     'Authorization:' => 'Bearer ' . $token,
@@ -34,16 +38,6 @@ class SpotifyRequester
                     'Content-Type:' => 'application/json',
                 ]
             ]);
-        } catch (RequestException $e) {
-            $this->client->request('GET', 'http://spotify-stats/app_dev.php/connect/spotify');
-            $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
-                'headers' => [
-                    'Authorization:' => 'Bearer ' . $token,
-                    'Accept:' => 'application/json',
-                    'Content-Type:' => 'application/json',
-                ]
-            ]);
-        }
 
         $content = json_decode($response->getBody()->getContents(), true);
 
@@ -171,11 +165,6 @@ class SpotifyRequester
         }
 
         return false;
-    }
-
-    protected function refreshToken()
-    {
-
     }
 
     public function getListOfPlaylist()

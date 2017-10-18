@@ -23,13 +23,15 @@ gulp.task('less', function() {
         .pipe(gulp.dest('web/css/'));
 });
 
-gulp.task('pages-js', function() {
+gulp.task('js', function() {
     return gulp.src([
-        'web-src/js/*.js',
-        'web-src/js/**/*.js'
+        'node_modules/chart.js/dist/Chart.js',
+        'node_modules/jquery/dist/jquery.js',
+        'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init())
         .pipe(babel({compact: true}))
+        .pipe(concat('app.js'))
         .pipe(uglify())
         .pipe(sourcemaps.write("./maps"))
         .pipe(gulp.dest('web/js'));
@@ -39,6 +41,7 @@ gulp.task('pages-js', function() {
 gulp.task('default', ['clean'], function () {
     var tasks = [
         'less',
+        'js'
     ];
 
     tasks.forEach(function (val) {
@@ -46,9 +49,9 @@ gulp.task('default', ['clean'], function () {
     });
 });
 
-gulp.task('watch', ['less', 'pages-js'], function () {
+gulp.task('watch', ['less', 'js'], function () {
     gulp.watch('web-src/less/*.less', ['less']);
     gulp.watch('web-src/less/**/*.less', ['less']);
-    gulp.watch('web-src/js/*.js', ['pages-js']);
-    gulp.watch('web-src/js/**/*.js', ['pages-js']);
+    gulp.watch('web-src/js/*.js', ['js']);
+    gulp.watch('web-src/js/**/*.js', ['js']);
 });

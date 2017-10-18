@@ -31,6 +31,7 @@ security:
                                     service: ib_user.oauth_user_provider
 
 
+
         main:
             anonymous: ~
             # activate different ways to authenticate

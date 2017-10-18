@@ -7,6 +7,7 @@ use AppBundle\Service\SpotifyRequester;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
@@ -34,7 +35,7 @@ class DefaultController extends Controller
      */
     public function loginAction()
     {
-        return $this->render('default/login.html.twig');
+        return $this->render('@App/default/login.html.twig');
     }
 
     /**
@@ -44,11 +45,23 @@ class DefaultController extends Controller
     {
 
     }
-    /**
-     * Route("/login/check-spotify", name="check-spotify")
-     */
-    //public function checkAction(Request $request)
-    //{
 
-    //}
+   /**
+    * @Route("/statuses", name="statuses")
+    */
+    public function getStatusesAction()
+    {
+        $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
+        $countF = 0;
+        $countT = 0;
+        foreach ($users as $user) {
+            if ($user->getIsPremium()) {
+                $countT++;
+            } else {
+                $countF++;
+            }
+        }
+        $statuses = [$countF, $countT];
+        return new JsonResponse($statuses);
+    }
 }

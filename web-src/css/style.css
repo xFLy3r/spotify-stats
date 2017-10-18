@@ -1,0 +1,12 @@
+/*html {
+    overflow-y: auto;
+}
+body {
+    background: #74ebd5;
+    background: -webkit-linear-gradient(to right, #74ebd5, #acb6e5);
+    background: linear-gradient(to right, #74ebd5, #acb6e5);
+}  */
+#test {
+    width: 75% !important;
+    height: 75% !important;
+}
