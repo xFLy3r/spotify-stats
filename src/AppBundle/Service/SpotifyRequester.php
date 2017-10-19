@@ -4,8 +4,12 @@ namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Promise\EachPromise;
+use GuzzleHttp\Psr7\Request;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SpotifyRequester
@@ -15,6 +19,8 @@ class SpotifyRequester
     protected $client;
 
     protected $tokenStorage;
+
+    protected $savedTracks;
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
@@ -45,7 +51,6 @@ class SpotifyRequester
         if ($token === false) {
             return null;
         }
-
             $response = $this->client->get(SpotifyRequester::SPOTIFY_LIBRATY_URI, [
                 'headers' => [
                     'Authorization:' => 'Bearer ' . $token,
@@ -143,10 +148,10 @@ class SpotifyRequester
                 $genres[] = $genre;
             }
         }
-
         $genre = array_search(max(array_count_values($genres)), array_count_values($genres));
         return ucwords(strtolower($genre));
     }
+
 
     public function getSavedTracks()
     {
@@ -165,7 +170,6 @@ class SpotifyRequester
                 ]);
 
             $content = json_decode($response->getBody()->getContents(), true);
-
         return $content['total'];
     }
 

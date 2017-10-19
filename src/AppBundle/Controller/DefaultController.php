@@ -25,13 +25,13 @@ class DefaultController extends Controller
             'track' => $spotify->getFavouriteTrack(),
             'recentlyPlayed' => $spotify->getRecentlyPlayedTrack(),
             'countOfSavedTracks' => $spotify->getSavedTracks(),
-            'favouriteGenre' => $spotify->getFavouriteGenre(),
+            'favouriteGenre' => $spotify->getFavouriteGenreBySavedTracks(),
             'countOfPlaylists' => $spotify->getListOfPlaylist(),
         ]);
     }
 
     /**
-     * @Route("/login", name="login")
+     * Route("/login", name="login")
      */
     public function loginAction()
     {
