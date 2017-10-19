@@ -25,7 +25,7 @@ class DefaultController extends Controller
             'track' => $spotify->getFavouriteTrack(),
             'recentlyPlayed' => $spotify->getRecentlyPlayedTrack(),
             'countOfSavedTracks' => $spotify->getSavedTracks(),
-            'favouriteGenre' => $spotify->getFavouriteGenreBySavedTracks(),
+            'favouriteGenre' => $spotify->getFavouriteGenre(),
             'countOfPlaylists' => $spotify->getListOfPlaylist(),
         ]);
     }

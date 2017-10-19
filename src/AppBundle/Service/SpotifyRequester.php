@@ -152,7 +152,6 @@ class SpotifyRequester
         return ucwords(strtolower($genre));
     }
 
-
     public function getSavedTracks()
     {
         $token = $this->getToken();
