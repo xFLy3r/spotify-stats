@@ -10,6 +10,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class SpotifyRequester
 {
+    CONST SPOTIFY_LIBRATY_URI = 'https://api.spotify.com/v1/me/';
+
     protected $client;
 
     protected $tokenStorage;
@@ -20,10 +22,23 @@ class SpotifyRequester
         $this->client = new Client();
     }
 
-    private function refreshToken()
+    private function refreshToken(OAuthToken $oAuthToken)
     {
-        $this->getToken();
+            $date = new \DateTime();
+            $oAuthToken->setCreatedAt($date->getTimestamp());
+            $response = $this->client->request('POST', 'https://accounts.spotify.com/api/token', [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $oAuthToken->getRefreshToken(),
+                    'client_id' => 'c50aa5b6db424029a2760363aee0467f',
+                    'client_secret' => '5776bef0a5bc46a89b8ff0a259d5d5c5',
+            ]]);
+            $mass = json_decode($response->getBody()->getContents(), true);
+            $oAuthToken->setAccessToken($mass['access_token']);
+
+            return $oAuthToken;
     }
+
     public function getInfoAboutCurrentUser()
     {
         $token = $this->getToken();
@@ -31,7 +46,7 @@ class SpotifyRequester
             return null;
         }
 
-            $response = $this->client->request('GET', 'https://api.spotify.com/v1/me', [
+            $response = $this->client->get(SpotifyRequester::SPOTIFY_LIBRATY_URI, [
                 'headers' => [
                     'Authorization:' => 'Bearer ' . $token,
                     'Accept:' => 'application/json',
@@ -39,9 +54,7 @@ class SpotifyRequester
                 ]
             ]);
 
-        $content = json_decode($response->getBody()->getContents(), true);
-
-        return $content;
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     public function getFavouriteArtist()
@@ -161,6 +174,10 @@ class SpotifyRequester
         if ($this->tokenStorage->getToken() instanceof OAuthToken) {
             /** @var OAuthToken $oAuthToken */
             $oAuthToken = $this->tokenStorage->getToken();
+            if ($oAuthToken->isExpired()) {
+                return $this->refreshToken($oAuthToken);
+            }
+
             return $oAuthToken->getAccessToken();
         }
 
