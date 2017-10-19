@@ -152,6 +152,96 @@ class SpotifyRequester
         return ucwords(strtolower($genre));
     }
 
+    public function getFavouriteGenreBySavedTracks()
+    {
+        $token = $this->getToken();
+        if ($token === false) {
+            return null;
+        }
+        $response = $this->client->request('GET',
+            'https://api.spotify.com/v1/me/tracks?limit=1', [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
+
+        $content = json_decode($response->getBody()->getContents(), true);
+        $myCount = (($content['total'] % 50)) ? intdiv($content['total'], 50) + 1: intdiv($content['total'], 50);
+
+        $promises = [];
+        $offset = 0;
+        $tracks = [];
+        for ($i = 0; $i < $myCount; $i++) {
+            $promises[] = $this->client->requestAsync('GET', 'https://api.spotify.com/v1/me/tracks?limit=50&offset=' . $offset, [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
+            $offset += 50;
+        };
+        $promises = new EachPromise($promises, [
+            'concurrency' => 5,
+            'fulfilled' => function (ResponseInterface $responses) use (&$tracks) {
+                $content = json_decode($responses->getBody()->getContents(), true);
+                foreach ($content['items'] as $item) {
+                    foreach ($item['track']['artists'] as $artist) {
+                        $tracks[] = $artist['id'];
+                    }
+                }
+                /**
+                 * GOT LIST OF IDS ARTISTS $tracks
+                 */
+                $tracks = array_unique($tracks);
+            },
+        ]);
+        $promises->promise()->wait();
+        $offset = 0;
+        $myCount = ((count($tracks) % 50)) ? intdiv(count($tracks), 50) + 1: intdiv(count($tracks), 50);
+        $promises2 = [];
+        for ($i = 0; $i < $myCount; $i++) {
+            $string = '';
+            $j = 0;
+            foreach (array_slice($tracks, $offset) as  $id) {
+                if ($j == 50) break;
+                $string .= $id . ',';
+                $j++;
+            }
+            $newString = substr($string, 0, -1);
+            $promises2[] = $this->client->requestAsync('GET', 'https://api.spotify.com/v1/artists?ids=' . $newString, [
+                'headers' => [
+                    'Authorization:' => 'Bearer ' . $token,
+                    'Accept:' => 'application/json',
+                    'Content-Type:' => 'application/json',
+                ]
+            ]);
+            $offset += 50;
+        }
+        $genres = [];
+        $promises2 = new EachPromise($promises2, [
+            'concurrency' => 5,
+            'fulfilled' => function (ResponseInterface $responses) use (&$genres) {
+                $content = json_decode($responses->getBody()->getContents(), true);
+                foreach ($content as $item) {
+                    foreach ($item as $artist) {
+                        foreach ($artist['genres'] as $genre) {
+                            $genres[] = $genre;
+                        }
+                    }
+                }
+                /**
+                 * GOT LIST OF IDS ARTISTS $tracks
+                 */
+
+            },
+        ]);
+        $promises2->promise()->wait();
+
+        return ucwords(strtolower(array_search(max(array_count_values($genres)), array_count_values($genres))));
+    }
 
     public function getSavedTracks()
     {
