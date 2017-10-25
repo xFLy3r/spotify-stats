@@ -39,6 +39,5 @@ services:
             class: AppBundle\Security\SpotifyProvider
             arguments:
               - '@doctrine'
-              - '@request_stack'
     hwi_oauth.user.provider.entity:
                   class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider

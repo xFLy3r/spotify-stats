@@ -25,8 +25,8 @@ gulp.task('less', function() {
 
 gulp.task('js', function() {
     return gulp.src([
-        'node_modules/chart.js/dist/Chart.js',
         'node_modules/jquery/dist/jquery.js',
+        'node_modules/chart.js/dist/Chart.js',
         'web-src/js/*.js'
     ])
         .pipe(sourcemaps.init())
@@ -52,6 +52,7 @@ gulp.task('default', ['clean'], function () {
 gulp.task('watch', ['less', 'js'], function () {
     gulp.watch('web-src/less/*.less', ['less']);
     gulp.watch('web-src/less/**/*.less', ['less']);
+    gulp.watch('web-src/css/style.css', ['less']);
     gulp.watch('web-src/js/*.js', ['js']);
     gulp.watch('web-src/js/**/*.js', ['js']);
 });

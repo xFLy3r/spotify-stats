@@ -4,31 +4,22 @@ namespace AppBundle\Security;
 
 use AppBundle\Entity\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 
 class SpotifyProvider extends OAuthUserProvider
 {
     /**
-     * @var Request
-     */
-    protected $request;
-    /**
      * @var Doctrine
      */
     protected $doctrine;
 
-
-        /***
-         * @param Doctrine $doctrine
-         * @param RequestStack $requestStack
-         */
-    public function __construct(Doctrine $doctrine, RequestStack $requestStack) {
+    /***
+     * @param Doctrine $doctrine
+     */
+    public function __construct(Doctrine $doctrine) {
         $this->doctrine = $doctrine;
-        $this->request   = $requestStack->getCurrentRequest();
     }
 
     /***
@@ -40,15 +31,18 @@ class SpotifyProvider extends OAuthUserProvider
         $user = $this->doctrine->getRepository('AppBundle:User')->findOneBy([
             'spotifyId' => $response->getUsername()]);
         if (!$user) {
-            $user = new User($response->getUsername());
-            $user->setSpotifyId($response->getUsername());
-            $user->setName($response->getRealName());
+            $user = new User(
+                $response->getUsername(),
+                $response->getRealName(),
+                $response->getResponse()['product']
+            );
+
             $this->doctrine->getManager()->persist($user);
             $this->doctrine->getManager()->flush();
             return $user;
         }
 
-        return $this->loadUserByUsername($user->getId());
+        return $this->loadUserByUsername($user->getSpotifyId());
     }
 
     public function supportsClass($class)

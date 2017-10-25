@@ -16,41 +16,47 @@
                 <p><strong>Type:</strong>  {{ user.product }}</p>
             </div>
         </div>
-    <div class="columns has-text-centered">
-        <div class="column is-one-third ">
-            <h3 class="title">Favourite Artist</h3>
-            <p>{{ artist.items.0.name }}</p>
+        <div class="columns has-text-centered">
+            <div class="column is-one-third ">
+                <h3 class="title">Favourite Artist</h3>
+                <p>{{ artist.items.0.name }}</p>
+            </div>
+            <div class="column is-one-third">
+                <h3 class="title">Favourite Track</h3>
+                <p><strong>{{ track.items.0.artists.0.name }}</strong> - {{ track.items.0.name }}</p>
+            </div>
+            <div class="column is-one-third">
+                <h3 class="title">Recently Played Track</h3>
+                <p><strong>{{ recentlyPlayed.items.0.track.artists.0.name }}</strong> - {{ recentlyPlayed.items.0.track.name }}</p>
+            </div>
         </div>
-        <div class="column is-one-third">
-            <h3 class="title">Favourite Track</h3>
-            <p><strong>{{ track.items.0.artists.0.name }}</strong> - {{ track.items.0.name }}</p>
+        <div class="columns has-text-centered">
+            <div class="column is-one-third">
+                <h3 class="title">Count of Saved Tracks</h3>
+                <p>{{ countOfSavedTracks }}</p>
+            </div>
+            <div class="column">
+                <h3 class="title">Favourite Genre</h3>
+                <p>{{ favouriteGenre }}</p>
+            </div>
+            <div class="column">
+                <h3 class="title">Count of Playlists</h3>
+                <p>{{ countOfPlaylists }}</p>
+            </div>
         </div>
-        <div class="column is-one-third">
-            <h3 class="title">Recently Played Track</h3>
-            <p><strong>{{ recentlyPlayed.items.0.track.artists.0.name }}</strong> - {{ recentlyPlayed.items.0.track.name }}</p>
+        <div class="columns has-text-centered">
+            <div class="column is-one-third">
+                <h3 class="title">Type of Account among Users</h3>
+                <canvas id="test"></canvas>
+            </div>
+            <div class="column">
+                <h3 class="title">Favourite Genre</h3>
+            </div>
+            <div class="column">
+                <h3 class="title">Count of Playlists</h3>
+            </div>
         </div>
-    </div>
-    <div class="columns has-text-centered">
-        <div class="column is-one-third">
-            <h3 class="title">Count of Saved Tracks</h3>
-            <p>{{ countOfSavedTracks }}</p>
-        </div>
-        <div class="column">
-            <h3 class="title">Favourite Genre</h3>
-            <p>{{ favouriteGenre }}</p>
-        </div>
-        <div class="column">
-            <h3 class="title">Count of Playlists</h3>
-            <p>{{ countOfPlaylists }}</p>
-        </div>
-    </div>
     {% else %}
-   <!-- <canvas id="test"></canvas> -->
-   <!-- <div class="columns is-mobile is-vcentered">
-        <div class="column is-half is-offset-one-quarter column-grey">
-            yes
-        </div>
-    </div> -->
     <section class="hero wrap is-fullheight wrap">
         <div class="hero-body">
             <div class="container has-text-centered">

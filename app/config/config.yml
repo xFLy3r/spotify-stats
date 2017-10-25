@@ -76,7 +76,7 @@ hwi_oauth:
                 client_id:           c50aa5b6db424029a2760363aee0467f
                 client_secret:       5776bef0a5bc46a89b8ff0a259d5d5c5
                 refresh_token: https://accounts.spotify.com/api/token
-                scope: 'user-read-private user-read-email user-library-read user-follow-read user-top-read user-read-recently-played'
+                scope: 'user-read-private user-read-email user-library-read user-follow-read user-top-read user-read-recently-played user-read-playback-state'
                 options:
                      csrf: true
 

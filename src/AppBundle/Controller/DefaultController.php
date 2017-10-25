@@ -49,7 +49,7 @@ class DefaultController extends Controller
    /**
     * @Route("/statuses", name="statuses")
     */
-    public function getStatusesAction()
+    public function getProductsAction()
     {
         $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
         $countF = 0;
@@ -61,7 +61,9 @@ class DefaultController extends Controller
                 $countF++;
             }
         }
-        $statuses = [$countF, $countT];
-        return new JsonResponse($statuses);
+        return new JsonResponse(array(
+            'countOfPremium' => $countT,
+            'countOfFree' => $countF,
+        ));
     }
 }

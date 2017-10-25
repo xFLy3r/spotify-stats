@@ -9,12 +9,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class SpotifyRequester
 {
     CONST SPOTIFY_LIBRARY_URI = 'https://api.spotify.com/v1/me/';
+    CONST CLIENT_ID = 'c50aa5b6db424029a2760363aee0467f';
+    CONST CLIENT_SECRET = '5776bef0a5bc46a89b8ff0a259d5d5c5';
 
     protected $client;
 
     protected $tokenStorage;
-
-    protected $savedTracks;
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
@@ -112,6 +112,7 @@ class SpotifyRequester
             }
         }
         $genre = array_search(max(array_count_values($genres)), array_count_values($genres));
+
         return ucwords(strtolower($genre));
     }
 
@@ -172,8 +173,8 @@ class SpotifyRequester
             'form_params' => [
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $oAuthToken->getRefreshToken(),
-                'client_id' => 'c50aa5b6db424029a2760363aee0467f',
-                'client_secret' => '5776bef0a5bc46a89b8ff0a259d5d5c5',
+                'client_id' => self::CLIENT_ID,
+                'client_secret' => self::CLIENT_SECRET,
             ]
         ]);
         $arrayResponse = json_decode($response->getBody()->getContents(), true);

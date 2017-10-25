@@ -26,7 +26,7 @@ security:
                                     spotify: /login/check-spotify
                                 login_path:        /login
                                 use_forward:       false
-                                failure_path:      /login
+                                failure_path:      /
                                 oauth_user_provider:
                                     service: ib_user.oauth_user_provider
 

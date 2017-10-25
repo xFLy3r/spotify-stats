@@ -13,6 +13,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
  */
 class User extends OAuthUser implements \Serializable
 {
+    CONST PREMIUM = 'premium';
+    CONST FREE = 'free';
+
     /**
      * @var int
      *
@@ -46,10 +49,14 @@ class User extends OAuthUser implements \Serializable
      */
     private $isPremium;
 
-    public function __construct($username)
+    public function __construct($username, $realName, $productType)
     {
         $this->isActive = true;
         parent::__construct($username);
+        $this->setSpotifyId($username);
+        $this->setName($realName);
+        $this->setIsPremium($productType);
+
     }
 
 
@@ -182,7 +189,11 @@ class User extends OAuthUser implements \Serializable
      */
     public function setIsPremium($isPremium)
     {
-        $this->isPremium = $isPremium;
+        if (self::PREMIUM === $isPremium) {
+            $this->isPremium = true;
+        } else{
+            $this->isPremium = false;
+        }
 
         return $this;
     }
