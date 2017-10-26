@@ -19,7 +19,9 @@ class SpotifyRequester
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->client = new Client();
+        $this->client = new Client([
+            'timeout' => 3.0
+        ]);
     }
 
     public function getInfoAboutCurrentUser(): ?array
@@ -30,9 +32,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI, [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json'
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -47,9 +47,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=1&time_range=long_term', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json'
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -64,9 +62,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/tracks?limit=1&time_range=long_term', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json'
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -81,9 +77,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'player/recently-played?limit=1', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json'
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -98,9 +92,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=50&time_range=long_term', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json',
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -124,9 +116,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'tracks?limit=1', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json',
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -141,9 +131,7 @@ class SpotifyRequester
 
         $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'playlists?limit=1', [
             'headers' => [
-                'Authorization:' => 'Bearer ' . $token,
-                'Accept:' => 'application/json',
-                'Content-Type:' => 'application/json',
+                'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
@@ -174,7 +162,7 @@ class SpotifyRequester
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $oAuthToken->getRefreshToken(),
                 'client_id' => self::CLIENT_ID,
-                'client_secret' => self::CLIENT_SECRET,
+                'client_secret' => self::CLIENT_SECRET
             ]
         ]);
         $arrayResponse = json_decode($response->getBody()->getContents(), true);

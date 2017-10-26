@@ -13,6 +13,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
  */
 class User extends OAuthUser implements \Serializable
 {
+    CONST PREMIUM = 'premium';
+    CONST FREE = 'free';
+
     /**
      * @var int
      *
@@ -46,10 +49,14 @@ class User extends OAuthUser implements \Serializable
      */
     private $isPremium;
 
-    public function __construct($username)
+    public function __construct($username, $realName, $productType)
     {
         $this->isActive = true;
         parent::__construct($username);
+        $this->setSpotifyId($username);
+        $this->setName($realName);
+        $this->setIsPremium($productType);
+
     }
 
 
@@ -148,5 +155,80 @@ class User extends OAuthUser implements \Serializable
             // $this->salt
             ) = unserialize($serialized);
     }
-}
 
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     *
+     * @return User
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set isPremium
+     *
+     * @param boolean $isPremium
+     *
+     * @return User
+     */
+    public function setIsPremium($isPremium)
+    {
+        if (self::PREMIUM === $isPremium) {
+            $this->isPremium = true;
+        } else{
+            $this->isPremium = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get isPremium
+     *
+     * @return boolean
+     */
+    public function getIsPremium()
+    {
+        return $this->isPremium;
+    }
+
+    /**
+     * Set countOfTracks
+     *
+     * @param integer $countOfTracks
+     *
+     * @return User
+     */
+    public function setCountOfTracks($countOfTracks)
+    {
+        $this->countOfTracks = $countOfTracks;
+
+        return $this;
+    }
+
+    /**
+     * Get countOfTracks
+     *
+     * @return integer
+     */
+    public function getCountOfTracks()
+    {
+        return $this->countOfTracks;
+    }
+}

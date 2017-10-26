@@ -21,9 +21,12 @@ html {
 }
 
 .spotify-icon {
+
     margin-right: 10px;
 }
-
+.fa {
+    font-family: 'FontAwesome' !important;
+}
 .myImage {
     display: block;
     margin: auto;
