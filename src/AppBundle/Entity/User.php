@@ -56,9 +56,7 @@ class User extends OAuthUser implements \Serializable
         $this->setSpotifyId($username);
         $this->setName($realName);
         $this->setIsPremium($productType);
-
     }
-
 
     /**
      * Get id
