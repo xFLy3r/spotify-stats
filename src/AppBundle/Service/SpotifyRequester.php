@@ -3,7 +3,9 @@
 namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SpotifyRequester
@@ -30,13 +32,24 @@ class SpotifyRequester
            return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI, [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI, [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true);
     }
 
     public function getFavouriteArtist(): ?array
@@ -45,13 +58,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=1&time_range=long_term', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=1&time_range=long_term', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+               echo $e->getMessage() . "\n";
+               echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true);
     }
 
     public function getFavouriteTrack(): ?array
@@ -60,13 +84,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/tracks?limit=1&time_range=long_term', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'top/tracks?limit=1&time_range=long_term', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true);
     }
 
     public function getRecentlyPlayedTrack(): ?array
@@ -75,13 +110,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'player/recently-played?limit=1', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'player/recently-played?limit=1', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true);
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true);
     }
 
     public function getFavouriteGenre(): ?string
@@ -90,13 +136,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=50&time_range=long_term', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'top/artists?limit=50&time_range=long_term', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        $content = json_decode($response->getBody()->getContents(), true);
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        $content = json_decode($response, true);
         $genres = array();
         foreach ($content['items'] as $artist) {
             foreach ($artist['genres'] as $genre) {
@@ -114,13 +171,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'tracks?limit=1', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'tracks?limit=1', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true)['total'];
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true)['total'];
     }
 
     public function getCountOfPlaylist(): ?int
@@ -129,13 +197,24 @@ class SpotifyRequester
             return null;
         }
 
-        $response = $this->client->get(self::SPOTIFY_LIBRARY_URI . 'playlists?limit=1', [
+        $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI . 'playlists?limit=1', [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token
             ]
         ]);
 
-        return json_decode($response->getBody()->getContents(), true)['total'];
+        $promise->then(
+            function (ResponseInterface $res) use (&$response) {
+                $response .= $res->getBody()->getContents();
+            },
+            function (RequestException $e) {
+                echo $e->getMessage() . "\n";
+                echo $e->getRequest()->getMethod();
+            }
+        );
+        $promise->wait();
+
+        return json_decode($response, true)['total'];
     }
 
     protected function getToken()
