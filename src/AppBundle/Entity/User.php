@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -11,7 +12,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User extends OAuthUser implements \Serializable
+class User implements UserInterface, \Serializable
 {
     CONST PREMIUM = 'premium';
     CONST FREE = 'free';
@@ -28,9 +29,9 @@ class User extends OAuthUser implements \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="spotify_id", type="string", length=255, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
-    private $spotifyId;
+    private $username;
 
     /**
      * @var string
@@ -38,6 +39,20 @@ class User extends OAuthUser implements \Serializable
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column()
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column()
+     */
+    private $srcImage;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -49,13 +64,14 @@ class User extends OAuthUser implements \Serializable
      */
     private $isPremium;
 
-    public function __construct($username, $realName, $productType)
+    public function __construct($username, $realName, $productType, $srcImage, $email)
     {
         $this->isActive = true;
-        parent::__construct($username);
-        $this->setSpotifyId($username);
+        $this->setUsername($username);
         $this->setName($realName);
         $this->setIsPremium($productType);
+        $this->setSrcImage($srcImage);
+        $this->setEmail($email);
     }
 
     /**
@@ -69,27 +85,32 @@ class User extends OAuthUser implements \Serializable
     }
 
     /**
-     * Set spotifyId
+     * Set username
      *
-     * @param string $spotifyId
+     * @param string $username
      *
      * @return User
      */
-    public function setSpotifyId($spotifyId)
+    public function setUsername($username)
     {
-        $this->spotifyId = $spotifyId;
+        $this->username = $username;
 
         return $this;
     }
 
     /**
-     * Get spotifyId
+     * Get username
      *
      * @return string
      */
-    public function getSpotifyId()
+    public function getUsername()
     {
-        return $this->spotifyId;
+        return $this->username;
+    }
+
+    public function getPassword()
+    {
+        return null;
     }
 
     /**
@@ -127,12 +148,9 @@ class User extends OAuthUser implements \Serializable
 
     public function getSalt()
     {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
         return null;
     }
 
-    /** @see \Serializable::serialize() */
     public function serialize()
     {
         return serialize(array(
@@ -204,5 +222,53 @@ class User extends OAuthUser implements \Serializable
     public function getIsPremium()
     {
         return $this->isPremium;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set srcImage
+     *
+     * @param string $srcImage
+     *
+     * @return User
+     */
+    public function setSrcImage($srcImage)
+    {
+        $this->srcImage = $srcImage;
+
+        return $this;
+    }
+
+    /**
+     * Get srcImage
+     *
+     * @return string
+     */
+    public function getSrcImage()
+    {
+        return $this->srcImage;
     }
 }

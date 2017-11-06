@@ -31,7 +31,7 @@ class SpotifyRequester
         if (!$token = $this->getToken()) {
            return null;
         }
-
+        dump($this->tokenStorage->getToken()->getUser());
         $promise = $this->client->getAsync(self::SPOTIFY_LIBRARY_URI, [
             'headers' => [
                 'Authorization:' => 'Bearer ' . $token

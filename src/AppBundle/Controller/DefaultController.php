@@ -20,12 +20,11 @@ class DefaultController extends Controller
     {
         $spotify = $this->get('app.spotify_requester');
         return $this->render('@App/default/index.html.twig', [
-            'user' => $spotify->getInfoAboutCurrentUser(),
             'artist' => $spotify->getFavouriteArtist(),
             'track' => $spotify->getFavouriteTrack(),
             'recentlyPlayed' => $spotify->getRecentlyPlayedTrack(),
             'countOfSavedTracks' => $spotify->getSavedTracks(),
-            'favouriteGenre' => $spotify->getFavouriteGenre(),
+            //'favouriteGenre' => $spotify->getFavouriteGenre(),
             'countOfPlaylists' => $spotify->getCountOfPlaylist(),
         ]);
     }
@@ -46,6 +45,14 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @Route("/favourite/genre", name="favourite_genre")
+     *
+     */
+    public function getFavouriteGenre()
+    {
+        return new JsonResponse($this->get('app.spotify_requester')->getFavouriteGenre());
+    }
    /**
     * @Route("/statuses", name="statuses")
     */

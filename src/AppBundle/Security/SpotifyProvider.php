@@ -29,20 +29,22 @@ class SpotifyProvider extends OAuthUserProvider
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $user = $this->doctrine->getRepository('AppBundle:User')->findOneBy([
-            'spotifyId' => $response->getUsername()]);
+            'username' => $response->getUsername()]);;
         if (!$user) {
             $user = new User(
                 $response->getUsername(),
                 $response->getRealName(),
-                $response->getResponse()['product']
+                $response->getResponse()['product'],
+                $response->getResponse()['images'][0]['url'],
+                $response->getEmail()
             );
 
             $this->doctrine->getManager()->persist($user);
             $this->doctrine->getManager()->flush();
-            return $user;
         }
 
-        return $this->loadUserByUsername($user->getSpotifyId());
+        return $user;
+        //return $this->loadUserByUsername($user->getSpotifyId());
     }
 
     public function supportsClass($class)

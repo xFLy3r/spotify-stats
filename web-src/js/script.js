@@ -1,5 +1,5 @@
 function drawChart(myData) {
-    var data = {
+    const data = {
         labels: [
             'Free',
             'Premium'
@@ -41,4 +41,12 @@ $.ajax({
     }
 });
 
-
+$.get( window.location.href + 'favourite/genre', function(data) {
+    $("#genre").text(data);
+})
+    .done(function(data) {
+        $("#genre").text(data);
+    })
+    .fail(function() {
+        alert( "error" );
+    })

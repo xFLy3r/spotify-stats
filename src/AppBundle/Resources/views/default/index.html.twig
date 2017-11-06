@@ -1,19 +1,18 @@
 {% extends '@App/base.html.twig' %}
 
 {% block body %}
-    {% if user %}
+    {% if app.user %}
         <div class="columns is-mobile is-multiline is-centered top-column">
             <div class="column is-narrow">
                 <figure class="image is-128x128">
-                    <img src="{{ user.images.0.url }}">
+                    <img src="{{ app.user.srcImage }}">
                 </figure>
             </div>
             <div class="column is-narrow">
-                <p><strong>Display name:</strong> {{ user.display_name }}</p>
-                <p><strong>Country:</strong> {{ user.country }}</p>
-                <p><strong>Email:</strong>  {{ user.email }}</p>
-                <p><strong>Id:</strong>  {{ user.id }}</p>
-                <p><strong>Type:</strong>  {{ user.product }}</p>
+                <p><strong>Display name:</strong> {{ app.user.name }}</p>
+                <p><strong>Email:</strong>  {{ app.user.email }}</p>
+                <p><strong>Id:</strong>  {{ app.user.username }}</p>
+                <p><strong>Type:</strong> {% if app.user.isPremium %} premium {% else %} free {% endif %}</p>
             </div>
         </div>
         <div class="columns has-text-centered">
@@ -37,7 +36,7 @@
             </div>
             <div class="column">
                 <h3 class="title">Favourite Genre</h3>
-                <p>{{ favouriteGenre }}</p>
+                <p id="genre"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
             </div>
             <div class="column">
                 <h3 class="title">Count of Playlists</h3>
