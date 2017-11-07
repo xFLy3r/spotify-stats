@@ -33,20 +33,38 @@ function drawChart(myData) {
     });
 }
 
-$.ajax({
-    url: window.location.href + 'statuses',
-    dataType: 'json',
-    success: function (json) {
-        drawChart(json);
-    }
-});
-
-$.get( window.location.href + 'favourite/genre', function(data) {
-    $("#genre").text(data);
+$.get('./app_dev.php/statuses', function(data) {
+    drawChart(data);
 })
+
+$.get('./app_dev.php/favourite/genre')
     .done(function(data) {
-        $("#genre").text(data);
+        $("#favouriteGenre").text(data);
     })
     .fail(function() {
         alert( "error" );
+    });
+
+$.get('./app_dev.php/favourite/artist')
+    .done(function(data) {
+        $("#favouriteArtist").text(data['items'][0].name);
     })
+    .fail(function() {
+        alert( "error" );
+    });
+
+$.get('./app_dev.php/favourite/track')
+    .done(function(data) {
+        $("#favouriteTrack").html('<strong>' + data['items'][0]['artists'][0].name + '</strong> - '+ data['items'][0].name);
+    })
+    .fail(function() {
+        alert( "error" );
+    });
+
+$.get('./app_dev.php/recently/track')
+    .done(function(data) {
+        $("#recentlyPlayedTrack").html('<strong>' + data['items'][0]['track']['artists'][0].name + '</strong> - '+ data['items'][0]['track'].name);
+    })
+    .fail(function() {
+        alert( "error" );
+    });

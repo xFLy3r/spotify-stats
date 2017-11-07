@@ -18,15 +18,15 @@
         <div class="columns has-text-centered">
             <div class="column is-one-third ">
                 <h3 class="title">Favourite Artist</h3>
-                <p>{{ artist.items.0.name }}</p>
+                <p id="favouriteArtist"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
             </div>
             <div class="column is-one-third">
                 <h3 class="title">Favourite Track</h3>
-                <p><strong>{{ track.items.0.artists.0.name }}</strong> - {{ track.items.0.name }}</p>
+                <p id="favouriteTrack"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
             </div>
             <div class="column is-one-third">
                 <h3 class="title">Recently Played Track</h3>
-                <p><strong>{{ recentlyPlayed.items.0.track.artists.0.name }}</strong> - {{ recentlyPlayed.items.0.track.name }}</p>
+                <p id="recentlyPlayedTrack"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
             </div>
         </div>
         <div class="columns has-text-centered">
@@ -36,7 +36,7 @@
             </div>
             <div class="column">
                 <h3 class="title">Favourite Genre</h3>
-                <p id="genre"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
+                <p id="favouriteGenre"><i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
             </div>
             <div class="column">
                 <h3 class="title">Count of Playlists</h3>

@@ -2,13 +2,9 @@
 
 namespace AppBundle\Controller;
 
-
-use AppBundle\Service\SpotifyRequester;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -20,11 +16,8 @@ class DefaultController extends Controller
     {
         $spotify = $this->get('app.spotify_requester');
         return $this->render('@App/default/index.html.twig', [
-            'artist' => $spotify->getFavouriteArtist(),
             'track' => $spotify->getFavouriteTrack(),
-            'recentlyPlayed' => $spotify->getRecentlyPlayedTrack(),
             'countOfSavedTracks' => $spotify->getSavedTracks(),
-            //'favouriteGenre' => $spotify->getFavouriteGenre(),
             'countOfPlaylists' => $spotify->getCountOfPlaylist(),
         ]);
     }
@@ -52,6 +45,33 @@ class DefaultController extends Controller
     public function getFavouriteGenre()
     {
         return new JsonResponse($this->get('app.spotify_requester')->getFavouriteGenre());
+    }
+
+    /**
+     * @Route("/favourite/artist", name="favourite_artist")
+     *
+     */
+    public function getFavouriteArtist()
+    {
+        return JsonResponse::fromJsonString($this->get('app.spotify_requester')->getFavouriteArtist());
+    }
+
+    /**
+     * @Route("/favourite/track", name="favourite_track")
+     *
+     */
+    public function getFavouriteTrack()
+    {
+        return JsonResponse::fromJsonString($this->get('app.spotify_requester')->getFavouriteTrack());
+    }
+
+    /**
+     * @Route("/recently/track", name="recently_track")
+     *
+     */
+    public function getRecenltyPlayedTrack()
+    {
+        return JsonResponse::fromJsonString($this->get('app.spotify_requester')->getRecentlyPlayedTrack());
     }
    /**
     * @Route("/statuses", name="statuses")

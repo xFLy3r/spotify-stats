@@ -52,7 +52,7 @@ class SpotifyRequester
         return json_decode($response, true);
     }
 
-    public function getFavouriteArtist(): ?array
+    public function getFavouriteArtist()
     {
         if (!$token = $this->getToken()) {
             return null;
@@ -75,10 +75,10 @@ class SpotifyRequester
         );
         $promise->wait();
 
-        return json_decode($response, true);
+        return $response;
     }
 
-    public function getFavouriteTrack(): ?array
+    public function getFavouriteTrack()
     {
         if (!$token = $this->getToken()) {
             return null;
@@ -101,10 +101,10 @@ class SpotifyRequester
         );
         $promise->wait();
 
-        return json_decode($response, true);
+        return $response;
     }
 
-    public function getRecentlyPlayedTrack(): ?array
+    public function getRecentlyPlayedTrack()
     {
         if (!$token = $this->getToken()) {
             return null;
@@ -127,7 +127,7 @@ class SpotifyRequester
         );
         $promise->wait();
 
-        return json_decode($response, true);
+        return $response;
     }
 
     public function getFavouriteGenre(): ?string
